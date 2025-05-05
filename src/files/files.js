@@ -2,7 +2,6 @@ import {createReadStream, createWriteStream} from 'node:fs';
 import {stat, writeFile, mkdir, unlink, rename} from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import os from "node:os";
 import {getCurrentDir} from "../paths/paths.js";
 
 export const handleCat = async (filePath) => {
@@ -29,7 +28,7 @@ export const handleCat = async (filePath) => {
         data.push(chunk);
       })
       .on('end', () => {
-        process.stdout.write(data.join('') + os.EOL);
+        process.stdout.write(data.join('') + '\n');
       })
       .on('error', (err) => {
         console.error('Error reading file:', err.message);
