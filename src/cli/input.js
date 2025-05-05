@@ -2,6 +2,7 @@ import readline from 'readline';
 import {getCurrentDir} from '../paths/paths.js';
 import {handleChangeDir, handleLs, handleUp} from '../navigations/navigations.js';
 import {handleAdd, handleCat, handleCp, handleMkdir, handleMv, handleRm, handleRn} from "../files/files.js";
+import {handleOSInfo} from "../osInfo/osInfo.js";
 
 export function startCLI(username) {
   const rl = readline.createInterface({
@@ -52,6 +53,9 @@ export function startCLI(username) {
       }
       case 'rm':
         await handleRm(argument);
+        break;
+      case 'os':
+        await handleOSInfo(argument);
         break;
       case '.exit':
         rl.close();
