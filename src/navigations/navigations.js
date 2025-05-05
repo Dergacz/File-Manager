@@ -18,7 +18,6 @@ export const handleUp = () => {
 }
 
 export const handleChangeDir = async (targetPath) => {
-  console.log('changeeeee')
   if (!targetPath) {
     console.log('Please provide a directory name.');
     return;
