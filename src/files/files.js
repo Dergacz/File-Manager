@@ -1,13 +1,13 @@
-import { createReadStream, createWriteStream } from 'node:fs';
-import { stat, writeFile, mkdir, unlink, rename } from 'node:fs/promises';
+import {createReadStream, createWriteStream} from 'node:fs';
+import {stat, writeFile, mkdir, unlink, rename} from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import os from "node:os";
-import { getCurrentDir } from "../paths/paths.js";
+import {getCurrentDir} from "../paths/paths.js";
 
 export const handleCat = async (filePath) => {
   if (!filePath) {
-    console.log('Please provide a file name.');
+    console.log('Please provide a file path.');
     return;
   }
 
@@ -18,19 +18,21 @@ export const handleCat = async (filePath) => {
 
   try {
     const stats = await stat(fullPath);
-    console.log(stats.isFile())
     if (!stats.isFile()) {
       console.log('Not a file');
       return;
     }
 
-    const readStream = createReadStream(fullPath, { encoding: 'utf-8' });
+    const readStream = createReadStream(fullPath, {encoding: 'utf-8'});
     readStream
       .on('data', (chunk) => {
         data.push(chunk);
       })
       .on('end', () => {
         process.stdout.write(data.join('') + os.EOL);
+      })
+      .on('error', (err) => {
+        console.error('Error reading file:', err.message);
       });
 
   } catch (err) {
@@ -43,7 +45,7 @@ export const handleAdd = async (fileName) => {
   const filePath = path.join(dirname, fileName);
 
   try {
-    await writeFile(filePath, '', { flag: 'wx' });
+    await writeFile(filePath, '', {flag: 'wx'});
     console.log(`File created: ${filePath}`);
   } catch (err) {
     console.log('Cannot create file', err.message);
@@ -89,8 +91,13 @@ export const handleCp = async (currentPath, newPath) => {
     return;
   }
 
-  const currentFullPath = path.resolve(process.cwd(), currentPath);
-  const newFullPath = path.resolve(process.cwd(), newPath);
+  const currentFullPath = path.isAbsolute(currentPath)
+    ? currentPath
+    : path.resolve(process.cwd(), currentPath);
+
+  const newFullPath = path.isAbsolute(newPath)
+    ? newPath
+    : path.resolve(process.cwd(), newPath);
 
   try {
     const sourceStat = await stat(currentFullPath);
@@ -114,16 +121,16 @@ export const handleCp = async (currentPath, newPath) => {
     readStream
       .pipe(writeStream)
       .on('error', (err) => {
-      console.error('Error reading file:', err.message);
-    });
+        console.error('Error reading file:', err.message);
+      });
 
     writeStream
       .on('finish', () => {
-      console.log('File successfully copied to:', destFilePath);
-    })
+        console.log('File successfully copied to:', destFilePath);
+      })
       .on('error', (err) => {
-      console.error('Error writing file:', err.message);
-    });
+        console.error('Error writing file:', err.message);
+      });
   } catch (err) {
     console.error('Error:', err.message);
   }
@@ -135,8 +142,13 @@ export const handleMv = async (currentPath, newPath) => {
     return;
   }
 
-  const currentFullPath = path.resolve(process.cwd(), currentPath);
-  const newFullPath = path.resolve(process.cwd(), newPath);
+  const currentFullPath = path.isAbsolute(currentPath)
+    ? currentPath
+    : path.resolve(process.cwd(), currentPath);
+
+  const newFullPath = path.isAbsolute(newPath)
+    ? newPath
+    : path.resolve(process.cwd(), newPath);
 
   try {
     const sourceStat = await stat(currentFullPath);

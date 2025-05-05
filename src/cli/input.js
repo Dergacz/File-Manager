@@ -5,8 +5,9 @@ import {handleAdd, handleCat, handleCp, handleMkdir, handleMv, handleRm, handleR
 import {handleOSInfo} from "../osInfo/osInfo.js";
 import {handleHash} from "../hash/hash.js";
 import {handleCompress, handleDecompress} from "../zip/zip.js";
+import {exitHandler} from "../utils/exitHandler.js";
 
-export function startCLI(username) {
+export const startCLI = (username) => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -73,7 +74,7 @@ export function startCLI(username) {
         break;
       }
       case '.exit':
-        rl.close();
+        exitHandler(username);
         break;
       default:
         console.log(`Invalid input: ${command}`);
@@ -85,7 +86,6 @@ export function startCLI(username) {
   });
 
   rl.on('SIGINT', () => {
-    console.log(`\nThank you for using File Manager, ${username}, goodbye!`);
-    process.exit(0);
+    exitHandler(username);
   });
 }

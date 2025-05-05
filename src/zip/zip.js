@@ -1,6 +1,6 @@
-import { createReadStream, createWriteStream } from 'node:fs';
-import { createBrotliCompress, createBrotliDecompress } from 'node:zlib';
-import { stat } from 'node:fs/promises';
+import {createReadStream, createWriteStream} from 'node:fs';
+import {createBrotliCompress, createBrotliDecompress} from 'node:zlib';
+import {stat} from 'node:fs/promises';
 import path from 'node:path';
 
 export const handleCompress = async (file, destinationPath) => {
@@ -72,9 +72,9 @@ export const handleDecompress = async (file, destinationPath) => {
         process.stdout.write('File successfully decompressed\n');
       })
       .on('error', (err) => {
-        console.error('Error compressing file:', err.message);
+        console.error('Error decompressing file:', err.message);
       });
   } catch (err) {
-    console.error('Cannot compress file', err.message);
+    console.error('Cannot decompress file', err.message);
   }
 }

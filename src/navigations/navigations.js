@@ -1,6 +1,6 @@
 import path from 'node:path';
 import process from 'node:process';
-import fs from 'node:fs/promises';
+import {stat, readdir} from 'node:fs/promises';
 import {setCurrentDir} from "../paths/paths.js";
 
 export const handleUp = () => {
@@ -28,7 +28,7 @@ export const handleChangeDir = async (targetPath) => {
     : path.resolve(process.cwd(), targetPath);
 
   try {
-    const stats = await fs.stat(fullPath);
+    const stats = await stat(fullPath);
     if (!stats.isDirectory()) {
       console.log('Not a directory');
       return;
@@ -46,7 +46,7 @@ export const handleLs = async () => {
   const cwd = process.cwd();
 
   try {
-    const files = await fs.readdir(cwd, {withFileTypes: true});
+    const files = await readdir(cwd, {withFileTypes: true});
     const sorted = [...files].sort((a, b) => {
       if (a.isDirectory() && !b.isDirectory()) return -1;
       if (!a.isDirectory() && b.isDirectory()) return 1;
