@@ -1,5 +1,3 @@
-import os from 'node:os';
-
 let currentDir = process.cwd();
 
 export const getCurrentDir = () => {

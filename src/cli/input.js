@@ -3,6 +3,8 @@ import {getCurrentDir} from '../paths/paths.js';
 import {handleChangeDir, handleLs, handleUp} from '../navigations/navigations.js';
 import {handleAdd, handleCat, handleCp, handleMkdir, handleMv, handleRm, handleRn} from "../files/files.js";
 import {handleOSInfo} from "../osInfo/osInfo.js";
+import {handleHash} from "../hash/hash.js";
+import {handleCompress, handleDecompress} from "../zip/zip.js";
 
 export function startCLI(username) {
   const rl = readline.createInterface({
@@ -57,6 +59,19 @@ export function startCLI(username) {
       case 'os':
         await handleOSInfo(argument);
         break;
+      case 'hash':
+        await handleHash(argument);
+        break;
+      case 'compress': {
+        const [currentPath, newPath] = argument.split(' ');
+        await handleCompress(currentPath, newPath);
+        break;
+      }
+      case 'decompress': {
+        const [currentPath, newPath] = argument.split(' ');
+        await handleDecompress(currentPath, newPath);
+        break;
+      }
       case '.exit':
         rl.close();
         break;
